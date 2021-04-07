@@ -17,7 +17,8 @@ class Sudoku:
                 row[i] = value
                 
     def __shufle(self):
-        pass                                #do ustalenia
+        pass                                #do ustalenia, np mozemy narazie zalozyc, ze wszystkie pola sa ruchome to wtedy wydaje sie to byc prosty
+                                            #do rozwiazania problem np tasujemy tak zeby zawsze dojsc do tego samego ulozenia (mamy jakis wzorzec ) ale to tylko sugestia :)
 
 
 
