@@ -58,19 +58,23 @@ class Candidate:
         self.fitness = fitness
     
 
-    def mutate(self): # in 3x3 block
+    def mutate(self):
 
         block_no = random.randint(0, self.size - 1)
         x_swap = random.randint(0, self.size - 1)
         y_swap = random.randint(0, self.size - 1)
         
-        while x_swap == y_swap:
+        block_x, block_y = block_no % 3, block_no // 3
+        x1, y1 = block_x * 3 + (x_swap % 3), block_y * 3 + (x_swap // 3)
+        x2, y2 = block_x * 3 + (y_swap % 3), block_y * 3 + (y_swap // 3)
+
+        while x_swap == y_swap or Candidate.static_fields[x1][y1] != 0 or Candidate.static_fields[x2][y2] != 0:
             x_swap = random.randint(0, self.size - 1)
             y_swap = random.randint(0, self.size - 1)
+            x1, y1 = block_x * 3 + (x_swap % 3), block_y * 3 + (x_swap // 3)
+            x2, y2 = block_x * 3 + (y_swap % 3), block_y * 3 + (y_swap // 3)
         
-        x, y = block_no % 3, block_no // 3
-        
-        self.array[x + (x_swap % 3)][y + (x_swap // 3)], self.array[x + (y_swap % 3)][y + (y_swap // 3)] = self.array[x + (y_swap % 3)][y + (y_swap // 3)], self.array[x + (x_swap % 3)][y + (x_swap // 3)]
+        self.array[x1][y1], self.array[x2][y2] = self.array[x2][y2], self.array[x1][y1]
 
     def create_sudoku_puzzle(self) -> None:
         if self.array is None:
@@ -120,21 +124,26 @@ class Candidate:
 
     def fill_in_array(self) -> None:
         if self.array is None:
-            self.array = np.zeros((self.size, self.size))
-
-        #numbers = [x for x in range(1, self.size + 1) for _ in range(1, self.size + 1)]
-
-        #for value in Candidate.static_fields:
-        #    numbers.remove(value)
+            self.array = np.copy(Candidate.static_fields) #np.zeros((self.size, self.size))
         
-        # for row_no, row in enumerate(self.array):
-        #     for i in range(len(row)):
-        #         if (row_no, i) not in Candidate.static_fields:
-        #             value = numbers[random.randint(0, len(numbers) - 1)]
-        #             numbers.remove(value)
-        #             row[i] = value
-        for i in range(self.size):
+        for i in range(9):
+            block_x = (i % 3) * 3
+            block_y = (i // 3) * 3
             
+            numbers = [ x for x in range(1, 9)]
+            
+            for x in range(3):
+                for y in range(3):
+                    if self.array[block_x + x][block_y + y] == 0:
+                        numbers.remove(value)
+                    
+            for x in range(3):
+                for y in range(3): 
+                    if self.array[block_x + x][block_y + y] != 0:
+                        value = numbers[random.randint(0, len(numbers) - 1)]
+                        numbers.remove(value)
+                        self.array[block_x + x][block_y + y] == value
+         
     @staticmethod
     def read_puzzle_from_file(path : str) -> list:
         fields = open(path).readlines()
@@ -145,11 +154,8 @@ class Candidate:
             fields[i] = tuple(fields[i])
         
         return fields
-            
-    def __shufle(self):
-        pass                                #do ustalenia, np mozemy narazie zalozyc, ze wszystkie pola sa ruchome to wtedy wydaje sie to byc prosty
-                                       #do rozwiazania problem np tasujemy tak zeby zawsze dojsc do tego samego ulozenia (mamy jakis wzorzec ) ale to tylko sugestia :)
-
+                
+                
 if __name__ == '__main__':
     sudoku = Candidate()
     sudoku.read_puzzle_from_file("sudoku/puzzles/puzzle1.txt")
