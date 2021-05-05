@@ -130,19 +130,20 @@ class Candidate:
             block_x = (i % 3) * 3
             block_y = (i // 3) * 3
             
-            numbers = [ x for x in range(1, 9)]
+            numbers = [ x for x in range(1, 10)]
             
             for x in range(3):
                 for y in range(3):
-                    if self.array[block_x + x][block_y + y] == 0:
-                        numbers.remove(value)
-                    
+                    if self.array[block_x + x][block_y + y] != 0:
+                        print(self.array[block_x + x][block_y + y])
+                        numbers.remove(self.array[block_x + x][block_y + y])
+            print()
             for x in range(3):
                 for y in range(3): 
-                    if self.array[block_x + x][block_y + y] != 0:
+                    if self.array[block_x + x][block_y + y] == 0:
                         value = numbers[random.randint(0, len(numbers) - 1)]
                         numbers.remove(value)
-                        self.array[block_x + x][block_y + y] == value
+                        self.array[block_x + x][block_y + y] = value
          
     @staticmethod
     def read_puzzle_from_file(path : str) -> list:
@@ -155,7 +156,7 @@ class Candidate:
         
         return fields
                 
-                
+
 if __name__ == '__main__':
     sudoku = Candidate()
     sudoku.read_puzzle_from_file("sudoku/puzzles/puzzle1.txt")

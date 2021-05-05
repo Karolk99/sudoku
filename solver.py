@@ -23,3 +23,6 @@ if __name__ == '__main__':
 
     Solver.read_puzzle_from_file(path="sudoku/puzzles/puzzle1.txt")
     print(Candidate.static_fields)
+    candidate = Candidate(9)
+    candidate.fill_in_array()
+    print(candidate.array)
