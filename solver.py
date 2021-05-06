@@ -18,7 +18,7 @@ class Solver():
             
             self.population.sort()
             best_fitness = self.population.candidates[0].fitness
-            print(best_fitness)
+            
             if best_fitness >= 1.0:
                 print("solution founded")
                 return self.population.candidates[0]
@@ -82,7 +82,8 @@ class Solver():
 
 if __name__ == '__main__':
 
-    Solver.read_puzzle_from_file(path="sudoku/puzzles/puzzle1.txt")
+    # Solver.read_puzzle_from_file(path="sudoku/puzzles/puzzle1.txt")
+    Candidate.static_fields = np.zeros((9, 9), dtype=int)
     solution = Solver().solve(elites_no=50, candidates_no=1000, generation_no=10000)
     print(solution.array)
     # print(Candidate.static_fields)
