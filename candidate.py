@@ -8,7 +8,7 @@ class Candidate:
 
     def __init__(self, size=9):
         self.size = 9
-        self.array = None 
+        self.array = np.zeros((size,size), dtype=int)
         self.fitness = None
 
     def udpate_fitness(self):
@@ -21,39 +21,22 @@ class Candidate:
 
         for i in range(0, self.size):
             for j in range(0, self.size):
-                row_count[self.array[i][j]-1] += 1
+                row_count[int(self.array[i][j])-1] += 1
 
             row_sum += (1.0/len(set(row_count)))/self.size
             row_count = np.zeros(self.size)
 
         for i in range(0, self.size):
             for j in range(0, self.size):
-                column_count[self.array[j][i]-1] += 1
+                column_count[int(self.array[j][i]-1)] += 1
 
             column_sum += (1.0 / len(set(column_count)))/self.size
             column_count = np.zeros(self.size)
 
-        for i in range(0, self.size, 3):
-            for j in range(0, self.size, 3):
-                block_count[self.array[i][j]-1] += 1
-                block_count[self.array[i][j+1]-1] += 1
-                block_count[self.array[i][j+2]-1] += 1
-                
-                block_count[self.array[i+1][j]-1] += 1
-                block_count[self.array[i+1][j+1]-1] += 1
-                block_count[self.array[i+1][j+2]-1] += 1
-                
-                block_count[self.array[i+2][j]-1] += 1
-                block_count[self.array[i+2][j+1]-1] += 1
-                block_count[self.array[i+2][j+2]-1] += 1
-
-                block_sum += (1.0/len(set(block_count)))/self.size
-                block_count = np.zeros(self.size)
-
-        if (int(row_sum) == 1 and int(column_sum) == 1 and int(block_sum) == 1):
+        if (int(row_sum) == 1 and int(column_sum) == 1):
             fitness = 1.0
         else:
-            fitness = column_sum * block_sum
+            fitness = column_sum * row_sum
         
         self.fitness = fitness
     
@@ -75,7 +58,7 @@ class Candidate:
             x2, y2 = block_x * 3 + (y_swap % 3), block_y * 3 + (y_swap // 3)
         
         self.array[x1][y1], self.array[x2][y2] = self.array[x2][y2], self.array[x1][y1]
-
+    
     def create_sudoku_puzzle(self) -> None:
         if self.array is None:
             self.array = np.zeros((self.size, self.size))
@@ -125,7 +108,7 @@ class Candidate:
     def fill_in_array(self) -> None:
         if self.array is None:
             self.array = np.copy(Candidate.static_fields) #np.zeros((self.size, self.size))
-        
+            
         for i in range(9):
             block_x = (i % 3) * 3
             block_y = (i // 3) * 3
@@ -135,9 +118,8 @@ class Candidate:
             for x in range(3):
                 for y in range(3):
                     if self.array[block_x + x][block_y + y] != 0:
-                        print(self.array[block_x + x][block_y + y])
                         numbers.remove(self.array[block_x + x][block_y + y])
-            print()
+
             for x in range(3):
                 for y in range(3): 
                     if self.array[block_x + x][block_y + y] == 0:

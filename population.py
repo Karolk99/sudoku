@@ -12,19 +12,22 @@ class Population():
 
         for _ in range(0, candidates_no):
             candidate = Candidate()
-            candidate.fill_in_array() # dopracować
+            candidate.fill_in_array()
             self.candidates.append(candidate)
         
         self.udpate_fitness()
+        self.sort()
     
     def udpate_fitness(self):
         for candidate in self.candidates:
             candidate.udpate_fitness()
     
     def sort(self):
-        self.candidates.sort(self.sort_fitness)
-
-    def sort_fitness(self, x, y):
+        #self.candidates.sort(key=self.sort_fitness)
+        self.candidates.sort(key=lambda x: x.fitness, reverse=True)
+    
+    @staticmethod
+    def sort_fitness(x, y):
         if(x.fitness < y.fitness):
             return 1
         elif(x.fitness == y.fitness):
