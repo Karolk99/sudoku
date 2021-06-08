@@ -12,6 +12,8 @@ class Solver():
         self.population = Population(9)
         self.population.create_population(candidates_no)
         
+        fitness_history = []
+
         for generation in range(generation_no):
             
             print("Generation %d" % generation)
@@ -19,9 +21,11 @@ class Solver():
             self.population.sort()
             best_fitness = self.population.candidates[0].fitness
             
+            fitness_history.append(best_fitness)
+
             if best_fitness >= 1.0:
                 print("solution founded")
-                return self.population.candidates[0]
+                return self.population.candidates[0], fitness_history
             
             print("Best fitness: %f" % best_fitness)
 
@@ -60,7 +64,7 @@ class Solver():
             
             self.population.candidates = next_population
             self.population.udpate_fitness()
-        return None
+        return None, fitness_history
 
     @staticmethod
     def read_puzzle_from_file(path : str) -> list:
@@ -68,6 +72,7 @@ class Solver():
         fields = open(path).readlines()
         
         for i in range(len(fields)):
+            print(fields[i])
             fields[i] = fields[i].split(',')
             fields[i][2] = fields[i][2][:-1]
             fields[i] = tuple(fields[i])
@@ -82,10 +87,10 @@ class Solver():
 
 if __name__ == '__main__':
 
-    # Solver.read_puzzle_from_file(path="sudoku/puzzles/puzzle1.txt")
-    Candidate.static_fields = np.zeros((9, 9), dtype=int)
-    solution = Solver().solve(elites_no=50, candidates_no=1000, generation_no=10000)
-    print(solution.array)
+    Solver.read_puzzle_from_file(path="sudoku/puzzles/puzzle2.txt")
+    # Candidate.static_fields = np.zeros((9, 9), dtype=int)
+    # solution = Solver().solve(elites_no=50, candidates_no=1000, generation_no=10000)
+    # print(solution.array)
     # print(Candidate.static_fields)
     # candidate = Candidate(9)
     # candidate.fill_in_array()
