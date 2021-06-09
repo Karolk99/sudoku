@@ -12,7 +12,7 @@ class Population():
         self.candidates = []
 
         for _ in range(0, candidates_no):
-            candidate = Candidate(method)
+            candidate = None
             if method == 0:
                 candidate = Candidate()
             else:

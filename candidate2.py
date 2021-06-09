@@ -144,6 +144,7 @@ if __name__ == '__main__':
         Candidate2.static_fields[int(fields[i][0])][int(fields[i][1])] = int(fields[i][2])
     print(sudoku.array)
     sudoku.fill_in_array()
+    print(sudoku.array)
     sudoku.udpate_fitness()
     print(sudoku.fitness)
     for i in range(100000):

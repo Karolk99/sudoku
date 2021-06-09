@@ -8,9 +8,9 @@ class Solver():
     def __init__(self):
         pass
     
-    def solve(self, candidates_no, elites_no, generation_no):
+    def solve(self, candidates_no, elites_no, generation_no, method):
         self.population = Population(9)
-        self.population.create_population(candidates_no)
+        self.population.create_population(candidates_no, method)
         
         fitness_history = []
 
@@ -44,7 +44,7 @@ class Solver():
                 child1 = Candidate(9)
                 child2 = Candidate(9)
 
-                arrays = Crossover.crossover(parent1.array, parent2.array, 9)
+                arrays = Crossover.crossover(parent1.array, parent2.array, 9, method)
                 child1.array, child2.array = arrays[0], arrays[1]
 
                 child1.mutate()
