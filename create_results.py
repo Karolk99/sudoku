@@ -27,4 +27,4 @@ def test(candidates_no, elites_no, generation_no, plot: bool, file: str) -> None
 
 
 if __name__ == '__main__':
-    test(1000, 50, 1000, True, '')
+    test(500, 25, 1000, True, '')
