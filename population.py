@@ -1,4 +1,5 @@
 from candidate import Candidate
+from candidate2 import Candidate2
 from random import randint
 
 class Population():
@@ -7,11 +8,15 @@ class Population():
         self.candidates = None
         self.size = size
 
-    def create_population(self, candidates_no):
+    def create_population(self, candidates_no, method):
         self.candidates = []
 
         for _ in range(0, candidates_no):
-            candidate = Candidate()
+            candidate = Candidate(method)
+            if method == 0:
+                candidate = Candidate()
+            else:
+                candidate = Candidate2()
             candidate.fill_in_array()
             self.candidates.append(candidate)
         
