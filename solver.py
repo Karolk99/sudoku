@@ -72,7 +72,6 @@ class Solver():
         fields = open(path).readlines()
         
         for i in range(len(fields)):
-            print(fields[i])
             fields[i] = fields[i].split(',')
             fields[i][2] = fields[i][2][:-1]
             fields[i] = tuple(fields[i])
