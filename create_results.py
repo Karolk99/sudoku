@@ -3,28 +3,53 @@ import numpy as np
 from candidate import Candidate
 import matplotlib.pyplot as plt
 
-def test(candidates_no, elites_no, generation_no, plot: bool, file: str) -> None:
-    
+plot_path = 'results/plot'
+extension = '.png'
+
+def test(candidates_no, elites_no, generation_no, method, file: str):
     if file == '':
         Candidate.static_fields = np.zeros((9, 9), dtype=int)
     else:
         solver.Solver.read_puzzle_from_file(file)
-    
-    solution, fitness_history = solver.Solver().solve(candidates_no, elites_no, generation_no)
+    solution, fitness_history = solver.Solver().solve(candidates_no, elites_no, generation_no, method)
+    return fitness_history
 
-    generations = [ i for i in range(len(fitness_history))]
+def make_tests(files, arguments_list):
+    dir = 'puzzles/'
+    for path in files:
+        for arguments in arguments_list:
+            print(arguments)
+            candidates_no, elites_no, generation_no = arguments
+            fitness_history = []
+            for method in (0, 1):
+                fitness_history.append(test(candidates_no, elites_no, generation_no, method, dir + path))
+            generations0 = [ i for i in range(len(fitness_history[0]))]
+            generations1 = [ i for i in range(len(fitness_history[1]))]
+            plt.plot(generations0, fitness_history[0], label=f'{"wierszowa"}')
+            plt.plot(generations1, fitness_history[1], label=f'{"blokowa"}')
+            plt.legend()
+            plt.xlabel('Generacja')
+            plt.ylabel('Fitness')
+            plt.title('Algorytm genetyczny')
+            txt = f'parametry: elita: {elites_no}, populacja: {candidates_no}, liczba generacji: {generation_no}.'
+            plt.text(generation_no/2, -.13, txt, ha='center')
+            fig = plt.gcf()
+            fig.set_size_inches(10, 6)
+            plt.axis([0, generation_no, 0, 1])
 
-    if plot:
-        plt.plot(generations, fitness_history)
-    
-        plt.xlabel('Generacja')
-
-        plt.ylabel('Fitness')
+            filename = (plot_path + '_' + str(candidates_no) + '_' + str(elites_no) + 
+                                '_' + str(generation_no) + '_' + extension)
+            plt.savefig(filename)
+            plt.cla()
         
-        plt.title('Algorytm genetyczny')
-        
-        plt.show()
-
-
 if __name__ == '__main__':
-    test(500, 25, 1000, True, '')
+    files = ['puzzle1.txt', 'puzzle2.txt', 'puzzle3.txt']
+    arguments_list = [
+        (100, 50, 5),
+        (150, 20, 7),
+        (200, 8, 4),
+    ]
+    make_tests(files, arguments_list)
+    
+    #test(1000, 50, 500, 1, True, 'puzzles/puzzle1.txt')
+    #test(1000, 50, 500, 0, True, 'puzzles/puzzle1.txt')
