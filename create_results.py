@@ -24,7 +24,13 @@ def test(candidates_no, elites_no, generation_no, method, plot: bool, file: str)
 
         plt.ylabel('Fitness')
         
-        plt.title('Algorytm genetyczny')
+        plt.title(f'Algorytm genetyczny')
+        
+        txt = f'parametry: elita: {elites_no}, populacja: {candidates_no}, liczba generacji: {generation_no}. Wersja: {"wierszowa" if method else "blokowa"}'
+        plt.text(5, -.13, txt, ha='center')
+        fig = plt.gcf()
+        fig.set_size_inches(10, 6)
+        plt.axis([0, generation_no, 0, 1])
 
         filename = (path + '_' + str(candidates_no) + '_' + str(elites_no) + 
                              '_' + str(generation_no) + '_' + str(method) + extension)
@@ -34,5 +40,5 @@ def test(candidates_no, elites_no, generation_no, method, plot: bool, file: str)
 
 
 if __name__ == '__main__':
-    test(50, 50, 1000, 1, True, 'puzzles/puzzle1.txt')
-    test(50, 50, 1000, 0, True, 'puzzles/puzzle1.txt')
+    test(100, 5, 10, 1, True, 'puzzles/puzzle1.txt')
+    # test(100, 5, 1000, 0, True, 'puzzles/puzzle1.txt')
