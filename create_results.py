@@ -29,10 +29,16 @@ def test(candidates_no, elites_no, generation_no, method, plot: bool, file: str)
         filename = (path + '_' + str(candidates_no) + '_' + str(elites_no) + 
                              '_' + str(generation_no) + '_' + str(method) + extension)
         plt.savefig(filename)
-        plt.show()
+
+def make_tests(files, arguments_list):
+    for path in files:
+        for arguments in arguments_list:
+            candidates_no, elites_no, generation_no, method = arguments
+            test(candidates_no, elites_no, generation_no, method, True, path)
         
-
-
 if __name__ == '__main__':
-    test(50, 50, 1000, 1, True, 'puzzles/puzzle1.txt')
-    test(50, 50, 1000, 0, True, 'puzzles/puzzle1.txt')
+    path = 'puzzles/'
+    files = ['puzzle1.txt', 'puzzle2.txt', 'puzzle3.txt']
+    
+    test(1000, 50, 500, 1, True, 'puzzles/puzzle1.txt')
+    test(1000, 50, 500, 0, True, 'puzzles/puzzle1.txt')
